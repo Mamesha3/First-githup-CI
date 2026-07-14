@@ -8,7 +8,6 @@ from sqlalchemy import select, or_, update, delete, func
 from app.services.redis import (
    redis_set,
    redis_get,
-   redis_delete,
    redis_ttl
 )
 
@@ -35,8 +34,8 @@ async def create_note(note: CreateNote, db: Session = Depends(get_db)):
 async def get_notes(db: Session = Depends(get_db)):
     try:
         ## Redis services get value
-        redis_notes = await redis_get(f"redis_note")
-        note_expireIn = await redis_ttl(f"redis_note")
+        redis_notes = await redis_get("redis_note")
+        note_expireIn = await redis_ttl("redis_note")
         if redis_notes:
             return {"notes": redis_notes, "expire_in": note_expireIn}
 
@@ -61,7 +60,7 @@ async def get_notes(db: Session = Depends(get_db)):
         note_response = [NoteResponse.model_validate(note) for note in notes]
 
         ## Redis services set value
-        await redis_set(f"redis_note", note_response, 200)
+        await redis_set("redis_note", note_response, 200)
 
         return note_response
     except Exception as e:
