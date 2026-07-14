@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+psycopg[binary]
+sqlalchemy
+alembic
+pydantic-settings
+python-dotenv
+langgraph
+langchain
+langchain-ollama
+redis
